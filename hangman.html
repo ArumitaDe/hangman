@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Rock Paper Scissors Part 1</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+
+<body>
+    <div id="letters"></div>
+
+    <div id="game"> </div>
+
+
+
+
+    <script type="text/javascript">
+        function hangman() {
+            this.totalNoChances = 10;
+            this.displayArray = new Array(7);
+            this.blankArray = new Array(7);
+            this.userInputArray = new Array(7);
+
+            this.noOfChancesleft = function noOfChancesleft(chancesTaken) {
+                    return (totalNoChances - chancesTaken);
+                },
+
+
+                this.initializedisplayArray = function initializedisplayArray(currentWord) {
+                    for (var i = 0; i < currentWord.length; i++) {
+                        this.displayArray[i] = "&nbsp;&emsp;";
+                    }
+                    console.log(this.displayArray);
+                }
+
+
+            this.checkLetter = function checkLetter(letterTyped, currentWord) {
+
+                for (var i = 0; i < currentWord.length; i++) {
+
+                    if (letterTyped === currentWord.charAt(i)) {
+                        this.displayArray[i] = letterTyped + "&emsp;";
+                        console.log(this.displayArray);
+                        $("#letters").html(this.displayArray);
+
+                    }
+                }
+
+            }
+
+            this.letterLog = function letterLog(letter) {
+                console.log(letter + " is the letter typed");
+                console.log(this.displayArray.length);
+
+                for (var j = 0; j < this.displayArray.length; j++) {
+                    console.log(this.displayArray.length);
+                    console.log(this.displayArray[j]);
+                    console.log(letter + "&emsp;");
+                    if (this.displayArray[j] === (letter + "&emsp;")) {
+                        console.log(this.displayArray[j] + "_&emsp;" + letter + "_&emsp;matched");
+                        return true;
+                    }
+                }
+               
+                return false;
+            }
+
+
+            this.displayBlanks = function displayBlanks(currentWord) {
+
+
+                for (var j = 0; j < currentWord.length; j++)
+                    this.blankArray[j] = "_&emsp;";
+                console.log(this.blankArray);
+                $("#game").html(this.blankArray);
+
+            }
+      
+
+
+        };
+
+       
+        var num=0;
+        var Word;
+        
+        var wordBank =["soham","purbita","arumita","amrita","srija","amrita"];
+        
+        var x;
+        
+        var counter = 0;
+        alert("Which letter do you guess?");
+        
+       
+       
+        document.onkeyup = function() {
+            if(counter===0)
+                {
+                     Word=wordBank[num];
+                      x = new hangman();
+                        console.log(x);
+                x.displayBlanks(Word);
+                x.initializedisplayArray(Word);
+                 
+                }
+            
+            
+            
+            
+            choice = event.key;
+            console.log("counter is " + counter);
+            console.log(x);
+            if(counter<=15)
+                {
+            if (x.letterLog(choice) === false || counter === 0) {
+                x.checkLetter(choice, Word);
+                
+                counter = counter + 1;
+                
+                console.log(x.displayArray, Word)
+                
+                if(length===Word.length)
+                    {alert("Success");
+                    counter=0;}
+            } else
+        { alert("Please do not repeat letters");
+                    counter = counter + 1;
+                }}
+            else
+            {alert("No of turns are up.....New word");
+            counter=0;
+             if(num<5) num=num+1;
+            
+            }
+            //console.log("choice is" + x.letterLog(choice));
+        
+        }
+       
+    </script>
+
+</body>
+
+</html>
