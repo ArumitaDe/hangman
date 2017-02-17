@@ -5,9 +5,35 @@
     <meta charset="UTF-8">
     <title>Rock Paper Scissors Part 1</title>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <style>
+        div {
+            text-shadow: 2px 2px 5px red;
+            font-size: 40px;
+            letter-spacing: 20px;
+            margin-left: 400px;
+        }
+        
+        #letters {
+            margin-top: 200px;
+            margin-bottom: 0px;
+            padding-bottom: 0px;
+        }
+        
+        #game {
+            margin-top: 0px;
+            padding-top: 0px;
+        }
+        
+        #success {
+            text-shadow: 2px 2px 5px yellow;
+        }
+    </style>
 </head>
 
 <body>
+
+    <div id="success"> </div>
+
     <div id="letters"></div>
 
     <div id="game"> </div>
@@ -17,10 +43,10 @@
 
     <script type="text/javascript">
         function hangman() {
-            this.totalNoChances = 10;
-            this.displayArray = new Array(7);
-            this.blankArray = new Array(7);
-            this.userInputArray = new Array(7);
+
+            this.displayArray = new Array();
+            this.blankArray = new Array();
+            this.userInputArray = new Array();
 
             this.noOfChancesleft = function noOfChancesleft(chancesTaken) {
                     return (totalNoChances - chancesTaken);
@@ -29,19 +55,20 @@
 
                 this.initializedisplayArray = function initializedisplayArray(currentWord) {
                     for (var i = 0; i < currentWord.length; i++) {
-                        this.displayArray[i] = "&nbsp;&emsp;";
+                        this.displayArray[i] = "&nbsp;";
                     }
-                    console.log(this.displayArray);
+
                 }
 
 
-            this.checkLetter = function checkLetter(letterTyped, currentWord) {
+            this.checkLetter = function checkLetter(letterTyped, currentWord) {console.log("NOW IN CHECK LETTER");
 
                 for (var i = 0; i < currentWord.length; i++) {
-
+console.log("letterTyped  : "+ letterTyped );
+                    console.log("currentWord.charAt(i) : " + currentWord.charAt(i));
                     if (letterTyped === currentWord.charAt(i)) {
-                        this.displayArray[i] = letterTyped + "&emsp;";
-                        console.log(this.displayArray);
+                        this.displayArray[i] = letterTyped;
+
                         $("#letters").html(this.displayArray);
 
                     }
@@ -50,19 +77,16 @@
             }
 
             this.letterLog = function letterLog(letter) {
-                console.log(letter + " is the letter typed");
-                console.log(this.displayArray.length);
+
 
                 for (var j = 0; j < this.displayArray.length; j++) {
-                    console.log(this.displayArray.length);
-                    console.log(this.displayArray[j]);
-                    console.log(letter + "&emsp;");
-                    if (this.displayArray[j] === (letter + "&emsp;")) {
-                        console.log(this.displayArray[j] + "_&emsp;" + letter + "_&emsp;matched");
+
+                    if (this.displayArray[j] === (letter)) {
+
                         return true;
                     }
                 }
-               
+
                 return false;
             }
 
@@ -71,73 +95,100 @@
 
 
                 for (var j = 0; j < currentWord.length; j++)
-                    this.blankArray[j] = "_&emsp;";
-                console.log(this.blankArray);
+                    this.blankArray[j] = "_";
+
                 $("#game").html(this.blankArray);
 
             }
-      
+
 
 
         };
 
-       
-        var num=0;
+
+        var num = 0;
         var Word;
-        
-        var wordBank =["soham","purbita","arumita","amrita","srija","amrita"];
-        
+        var length = 0;
+
+        var wordBank = ["soham", "srija", "arumita",];
+
         var x;
-        
-        var counter = 0;
-        alert("Which letter do you guess?");
-        
-       
-       
+        var counter = 17;
+
+        $("#success").html(" Hangman game......press any key to begin ");
+
+
+
         document.onkeyup = function() {
-            if(counter===0)
-                {
-                     Word=wordBank[num];
-                      x = new hangman();
-                        console.log(x);
-                x.displayBlanks(Word);
-                x.initializedisplayArray(Word);
-                 
+
+                
+                                $("#success").html(" ");
+                            
+                         
+
+                $("#success").html(" Enter your guessed letter ");
+
+                if (counter === 17) {
+                    Word = wordBank[num];
+                    x = new hangman();
+                    x.displayBlanks(Word);
+                    x.initializedisplayArray(Word);
+                    counter = 0;
+
                 }
-            
-            
-            
-            
-            choice = event.key;
-            console.log("counter is " + counter);
-            console.log(x);
-            if(counter<=15)
-                {
-            if (x.letterLog(choice) === false || counter === 0) {
-                x.checkLetter(choice, Word);
-                
-                counter = counter + 1;
-                
-                console.log(x.displayArray, Word)
-                
-                if(length===Word.length)
-                    {alert("Success");
-                    counter=0;}
-            } else
-        { alert("Please do not repeat letters");
-                    counter = counter + 1;
-                }}
-            else
-            {alert("No of turns are up.....New word");
-            counter=0;
-             if(num<5) num=num+1;
-            
-            }
-            //console.log("choice is" + x.letterLog(choice));
-        
-        }
-       
+
+
+
+
+                choice = event.key;
+
+                if (counter <= 15) {
+                    if (x.letterLog(choice) === false || counter === 0) {
+                        x.checkLetter(choice, Word);
+                        counter = counter + 1;
+                        if (x.displayArray.includes("&nbsp;") === false) {
+                            counter = 17;
+                           $("#success").html("SUCCESS !!!");
+                            $("input").prop('disabled', true);
+
+                                setTimeout(function() { $("#game").html(" ");
+                                $("#letters").html(" ");}, 3000);
+                            
+                            setTimeout(function() {
+                                $("#success").html(" ");
+                            
+                            }, 3000);
+                             $("input").prop('disabled', false);
+                            
+                               
+                             if (num < (wordBank.length-1) )num = num + 1;
+                                else{if (num ==(wordBank.length-1)) setTimeout(function() {$("#success").html(" SUCCESS! GAME OVER !!"); }, 3000);
+                                }}
+                            
+                        }
+
+
+                     else {
+                      
+                                $("#success").html("Please do not repeat letters....select the next letter "); 
+                                counter = counter + 1;
+                            }
+                            }if (counter == 16) {
+                                alert("No of turns are up.....New word");
+                                console.log("wordBank :" + wordBank.length);
+                        console.log("num : " + num);
+                                counter = 17;
+                                if (num < (wordBank.length-1) )num = num + 1;
+                                else{if (num ===(wordBank.length-1)) setTimeout(function() {$("#success").html("  GAME OVER !!"); }, 3000);
+                                }
+                                
+                            }
+
+                        }
+                    
     </script>
+
+
 
 </body>
 
