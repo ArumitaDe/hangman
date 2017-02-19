@@ -42,7 +42,9 @@
 
 
     <script type="text/javascript">
-        function hangman() {
+       
+
+            function hangman() {
 
             this.displayArray = new Array();
             this.blankArray = new Array();
@@ -51,6 +53,8 @@
             this.noOfChancesleft = function noOfChancesleft(chancesTaken) {
                     return (totalNoChances - chancesTaken);
                 },
+
+          
 
 
                 this.initializedisplayArray = function initializedisplayArray(currentWord) {
@@ -62,19 +66,27 @@
 
 
             this.checkLetter = function checkLetter(letterTyped, currentWord) {console.log("NOW IN CHECK LETTER");
-
+                                                                               
+             var flag =false;
                 for (var i = 0; i < currentWord.length; i++) {
-console.log("letterTyped  : "+ letterTyped );
+                    console.log("letterTyped  : "+ letterTyped );
                     console.log("currentWord.charAt(i) : " + currentWord.charAt(i));
                     if (letterTyped === currentWord.charAt(i)) {
+                         $("#success").html("You have a letter match !! Great guess !!");
+                        flag=true;
                         this.displayArray[i] = letterTyped;
-
+                        console.log("this.displayArray[i] = letterTyped; " );
                         $("#letters").html(this.displayArray);
 
                     }
+                           
+                    
                 }
-
-            }
+                                                                               
+              if((flag==false)&&(choiceEnter!=13)){ $("#success").html("No match.....try another letter");
+                            console.log("now in  No match.....try another letter" );                                     
+   
+            }}
 
             this.letterLog = function letterLog(letter) {
 
@@ -101,43 +113,46 @@ console.log("letterTyped  : "+ letterTyped );
 
             }
 
+            };
 
-
-        };
+       
 
 
         var num = 0;
-        var Word;
+        var Word,flag;
         var length = 0;
-
-        var wordBank = ["soham", "srija", "arumita",];
-
+        var choice;
+        var wordBank = ["apples", "oranges", "bananas","pear","grapes","kiwi","strawberry","blueberry","pineapple"];
+        var choiceEnter;
         var x;
         var counter = 17;
+        var keyflag = true;
 
-        $("#success").html(" Hangman game......press any key to begin ");
+        $("#success").html(" Hangman game GUESS THE FRUIT NAME... press enter key to begin ");
 
 
 
-        document.onkeyup = function() {
-
- 
-
-                $("#success").html(" Enter your guessed letter ");
-
-                if (counter === 17) {
+        document.onkeyup = function(e) {
+            if ((keyflag==true )  && ((event.key =='a')||(event.key =='b')||(event.key =='c')||(event.key =='d')||(event.key =='e')||(event.key =='f')||(event.key =='g')||(event.key =='h')||(event.key =='i')||(event.key =='j')||(event.key =='k')||(event.key =='l')||(event.key =='m')||(event.key =='n')||(event.key =='o')||(event.key =='p')||(event.key =='q')||(event.key =='r')||(event.key =='s')||(event.key =='t')||(event.key =='u')||(event.key =='v')||(event.key =='w')||(event.key =='x')||(event.key =='y')||(event.key =='z')||(  e.keyCode == 13  )))
+        
+              
+{
+                if ((e.keyCode == 13) && (counter ==17 )) {
                     Word = wordBank[num];
                     x = new hangman();
                     x.displayBlanks(Word);
                     x.initializedisplayArray(Word);
                     counter = 0;
-
+                      $("#success").html(" Enter your guessed letter ");
+                    
                 }
+                
 
 
 
-
+                choiceEnter=e.keyCode;
                 choice = event.key;
+            
 
                 if (counter <= 15) {
                     if (x.letterLog(choice) === false || counter === 0) {
@@ -146,18 +161,18 @@ console.log("letterTyped  : "+ letterTyped );
                         if (x.displayArray.includes("&nbsp;") === false) {
                             counter = 17;
                            $("#success").html("SUCCESS !!!");
-                            $("input").prop('disabled', true);
+                           // $("input").prop('disabled', true);
 
                                 setTimeout(function() { $("#game").html(" ");
                                 $("#letters").html(" ");}, 3000);
                             
                             setTimeout(function() {
                                  $("#success").html(" ");
-                                $("#success").html("Press any key to continue ");
+                                $("#success").html("Press enter to continue ");
                                  
                             
                             }, 3000);
-                             $("input").prop('disabled', false);
+                            // $("input").prop('disabled', false);
                             
                                
                              if (num < (wordBank.length-1) )num = num + 1;
@@ -173,9 +188,11 @@ console.log("letterTyped  : "+ letterTyped );
                                 counter = counter + 1;
                             }
                             }if (counter == 16) {
-                                alert("No of turns are up.....New word");
+                                 $("#success").html("No of turns up for this word "); 
+                                $("#letters").html(" ");
+                                $("#game").html(" ");
                                 console.log("wordBank :" + wordBank.length);
-                        console.log("num : " + num);
+                                console.log("num : " + num);
                                 counter = 17;
                                 if (num < (wordBank.length-1) )num = num + 1;
                                 else{if (num ===(wordBank.length-1)) setTimeout(function() {$("#success").html("  GAME OVER !!"); }, 3000);
@@ -183,7 +200,7 @@ console.log("letterTyped  : "+ letterTyped );
                                 
                             }
 
-                        }
+        } }
                     
     </script>
 
